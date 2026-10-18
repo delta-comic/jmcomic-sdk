@@ -2,9 +2,13 @@
 import { NAlert, NButton, NRadio, NRadioGroup, NSpin } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 
-import { translate } from '@/i18n'
-import { runtime } from '@/runtime/PluginRuntime'
+import { useTranslate } from '@/i18n'
+import { useJmcomic } from '@/runtime/injection'
 import { useAsyncTask } from '@/runtime/useAsyncTask'
+
+const translate = useTranslate()
+
+const { runtime } = useJmcomic()
 
 const selected = ref('')
 const saving = ref(false)

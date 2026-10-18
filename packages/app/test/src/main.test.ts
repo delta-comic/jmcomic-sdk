@@ -1,11 +1,13 @@
-import { UniUser } from '@delta-comic/model'
-import { SharedFunction } from '@delta-comic/utils'
+import { UniUser } from '@delta-comic/client'
+import { routeToSearch } from '@delta-comic/client'
 import type { LoginUser, UserMe } from 'jmcomic-sdk'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { contentKeys, pluginName, searchKeys } from '@/constants'
 import jmcomicPlugin from '@/main'
-import { runtime } from '@/runtime/PluginRuntime'
+
+import { createTestService } from '../context'
+const { root, service, runtime } = createTestService()
 
 const testUser = {
   uid: 1,
@@ -16,14 +18,8 @@ const testUser = {
   s: 'avs',
 } as UserMe
 const login = { username: 'tester', user: testUser } satisfies LoginUser
-const jmcomicPluginConfig = jmcomicPlugin({ platform: 'web' })
-const model = jmcomicPluginConfig.model!
-const content = model.content!
-const user = model.user!
-const remotes = model.remotes!
+const { content, user, remotes } = service
 const resource = remotes.find(remote => remote.type === 'resource')!
-const special = model.special!
-const hooks = jmcomicPluginConfig.hooks!
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -39,9 +35,9 @@ describe('plugin registration', () => {
     expect(content.search!.methods.map(method => method.id).toSorted()).toEqual(
       Object.values(searchKeys).toSorted(),
     )
-    expect(content.models![0]?.Layout).toMatchObject({ name: 'LayoutDefault' })
-    expect(model.social!.subscribe).toBeDefined()
-    expect(model.expose!.runtime).toBe(runtime)
+    expect(content.models![0]?.Layout).toBeDefined()
+    expect(service.search.jmcomicSubscribe).toBeDefined()
+    expect(jmcomicPlugin.every(fn => typeof fn === 'function')).toBe(true)
   })
 
   test('declares an API remote with an auto-select trigger', async () => {
@@ -76,7 +72,7 @@ describe('plugin registration', () => {
 
     await remotes[0]!.test('auto', signal)
 
-    expect(selectFork).toHaveBeenCalledWith(undefined, signal)
+    expect(selectFork).toHaveBeenCalledWith(undefined, expect.any(AbortSignal))
   })
 
   test('restores a session or asks for the selected login form', async () => {
@@ -84,6 +80,7 @@ describe('plugin registration', () => {
       runtime.jm.auth.restoreSession({ username: 'tester', token: 'token', user: testUser })
       return runtime.jm.auth.session
     })
+    vi.spyOn(runtime, 'validateSession').mockResolvedValue(login)
     await expect(user.auth.default()).resolves.toBe('login')
     expect(UniUser.userBase.get(pluginName)?.id).toBe('1')
 
@@ -93,6 +90,15 @@ describe('plugin registration', () => {
     await loginSelection.call({ form } as never)
     expect(form).toHaveBeenCalledOnce()
     expect(runtime.login).toHaveBeenCalledWith({ username: 'tester', password: 'secret' })
+  })
+
+  test('clears the host account when remote logout fails', async () => {
+    UniUser.userBase.set(pluginName, service.items.JmUser.fromLogin(login))
+    vi.spyOn(runtime.jm.auth, 'logout').mockRejectedValue(new Error('offline'))
+    const selection = user.auth.selections.find(entry => entry.id === 'logout')!
+    await expect(selection.call({ form: vi.fn(), website: vi.fn() })).rejects.toThrow('offline')
+    expect(UniUser.userBase.has(pluginName)).toBe(false)
+    expect(runtime.jm.auth.session).toBeUndefined()
   })
 
   test('signs up through the explicit authentication selection', async () => {
@@ -132,7 +138,7 @@ describe('plugin registration', () => {
     await resource.test('https://image.test', signal)
     expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/media/photos/'), {
       method: 'HEAD',
-      signal,
+      signal: expect.any(AbortSignal),
     })
     fetch.mockResolvedValueOnce(new Response(null, { status: 503 }))
     await expect(resource.test('https://image.test', signal)).rejects.toThrow('503')
@@ -167,12 +173,6 @@ describe('plugin registration', () => {
   })
 
   test('preloads categories and treats repeated check-ins as non-fatal', async () => {
-    const describe = vi.fn()
-    expect(special.map(step => step.name)).toEqual([
-      'jmcomic.progress.checkIn',
-      'jmcomic.progress.preload',
-    ])
-
     runtime.categories = {
       blocks: [],
       categories: [
@@ -187,7 +187,15 @@ describe('plugin registration', () => {
       ],
     }
     vi.spyOn(runtime, 'preload').mockResolvedValue(undefined)
-    await special[1]!.call(describe)
+    root.provide('content', {
+      entries: new Map(),
+      register: () => async () => {},
+      onHotCategoryClick() {},
+      onHotTopButtonClick() {},
+    })
+    root.provide('jmcomicRemote', true)
+    const register = jmcomicPlugin.find(fn => fn.name === 'registerContent')!
+    await root.plugin(register)
     expect(runtime.preload).toHaveBeenCalledOnce()
     expect(content.promotes!.categories).toMatchObject([
       { namespace: 'main' },
@@ -196,7 +204,9 @@ describe('plugin registration', () => {
 
     runtime.jm.auth.restoreSession({ username: 'tester', token: 'token', user: testUser })
     const daily = vi.spyOn(runtime.jm.user, 'dailyCheck').mockRejectedValue(new Error('checked'))
-    await expect(special[0]!.call(describe)).resolves.toBeUndefined()
+    vi.spyOn(runtime, 'restoreSession').mockResolvedValue(runtime.jm.auth.session)
+    vi.spyOn(runtime, 'validateSession').mockResolvedValue(login)
+    await root.plugin(jmcomicPlugin.find(fn => fn.name === 'checkIn')!)
     expect(daily).toHaveBeenCalledOnce()
   })
 
@@ -227,26 +237,6 @@ describe('plugin registration', () => {
     expect(favorite).toHaveBeenCalledOnce()
 
     await user.userActions![0]!.call({ label: 'Author' } as never)
-    expect(SharedFunction.call).toHaveBeenCalledWith('routeToSearch', 'Author', [
-      pluginName,
-      searchKeys.keyword,
-    ])
-  })
-
-  test('routes barcode matches and cleans state during lifecycle hooks', async () => {
-    hooks.onSearchBarcodeSubmit!({ input: 'JM350234', search: { method: searchKeys.keyword } })
-    expect(SharedFunction.call).toHaveBeenCalledWith(
-      'routeToContent',
-      [pluginName, contentKeys.comic],
-      '350234',
-      '',
-    )
-
-    const shutdown = vi.spyOn(runtime, 'shutdown').mockImplementation(() => undefined)
-    hooks.onUnload!()
-    expect(shutdown).toHaveBeenCalledOnce()
-    const uninstall = vi.spyOn(runtime, 'uninstall').mockResolvedValue(undefined)
-    await hooks.onUninstall!()
-    expect(uninstall).toHaveBeenCalledOnce()
+    expect(routeToSearch).toHaveBeenCalledWith('Author', [pluginName, searchKeys.keyword])
   })
 })

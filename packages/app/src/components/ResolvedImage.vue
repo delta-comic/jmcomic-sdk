@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UniImage, type UniImageRaw } from '@delta-comic/model'
+import { UniImage, type UniImageRaw } from '@delta-comic/client'
 import { onBeforeUnmount, shallowRef, watch } from 'vue'
 
 interface Props {

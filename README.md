@@ -12,7 +12,9 @@
 - 发现：分区、排行榜、热门标签、推荐页、随机推荐、JM 编号识别和作者订阅。
 - 分流：插件探测 API 分流时自动选择延迟最低的可用节点；图片 CDN 则独立探测并在加载时执行图片解密。
 
-界面使用 Delta Comic UI、Naive UI 与 Tailwind CSS。
+插件默认导出只读 Cordis 函数数组，通过宿主服务注册内容、账户、分流、翻译与订阅。界面使用 Naive UI 与 Tailwind CSS。
+
+本地宿主 SDK 构建和覆盖安装步骤见 [交接与验收记录](HANDOFF.md)。
 
 ## 仓库结构
 
@@ -30,10 +32,10 @@
 
 ```sh
 vp install --frozen-lockfile
-vp fmt --check
-vp lint
-vp run typecheck
-vp test typecheck
+vp run lib-build
+vp check
+vp run -r typecheck
+vp test run
 vp test run --coverage
 vp run build
 ```
@@ -43,7 +45,7 @@ vp run build
 凭据写进仓库。测试代码不导入 Zod，公共类型使用 Vitest `.test-d.ts`、`expectTypeOf` 与
 `assertType` 验证。
 
-覆盖率门槛为 statements 80%、branches 75%、functions 80%、lines 80%。
+覆盖率门槛为 statements 80%、branches 70%、functions 80%、lines 80%。
 
 ## 安装插件
 

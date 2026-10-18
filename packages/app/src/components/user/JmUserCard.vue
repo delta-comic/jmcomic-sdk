@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import type { UniUser } from '@delta-comic/model'
+import type { UniUser } from '@delta-comic/client'
 import { computed } from 'vue'
 
 import ResolvedImage from '@/components/ResolvedImage.vue'
-import { translate } from '@/i18n'
-import type { JmUser } from '@/models/items'
+import { useTranslate } from '@/i18n'
+import { useJmcomic } from '@/runtime/injection'
+
+const translate = useTranslate()
 
 interface Props {
   user: UniUser
@@ -12,11 +14,13 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), { isSmall: false })
-const jmUser = computed(() => props.user as JmUser)
+const { items } = useJmcomic()
+const jmUser = computed(() => (props.user instanceof items.JmUser ? props.user : undefined))
 </script>
 
 <template>
   <section
+    v-if="jmUser"
     class="flex gap-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-neutral-900 dark:ring-white/10"
   >
     <ResolvedImage

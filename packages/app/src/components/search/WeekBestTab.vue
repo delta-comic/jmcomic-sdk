@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import type { UniItem } from '@delta-comic/model'
-import type { Content } from '@delta-comic/plugin'
-import { SharedFunction } from '@delta-comic/utils'
+import type { UniItem } from '@delta-comic/client'
+import type { Content } from '@delta-comic/client'
+import { routeToContent } from '@delta-comic/client'
 import { NAlert, NButton, NSelect, NSpin } from 'naive-ui'
 import { computed, onMounted, ref, watch } from 'vue'
 
-import { mapWeekContent } from '@/adapters/search'
 import JmItemCard from '@/components/JmItemCard.vue'
-import { translate } from '@/i18n'
-import { runtime } from '@/runtime/PluginRuntime'
+import { useTranslate } from '@/i18n'
+import { useJmcomic } from '@/runtime/injection'
 import { useAsyncTask } from '@/runtime/useAsyncTask'
+
+const { runtime, search: searchApi } = useJmcomic()
+
+const translate = useTranslate()
 
 interface Props {
   isActive: boolean
@@ -34,11 +37,10 @@ const list = useAsyncTask(async signal => {
     { id: Number(category.value), type: type.value },
     signal,
   )
-  return mapWeekContent(result.list, type.value)
+  return searchApi.mapWeekContent(result.list, type.value)
 })
 
-const openItem = (item: UniItem) =>
-  SharedFunction.call('routeToContent', item.contentType, item.id, item.$thisEp.id, item)
+const openItem = (item: UniItem) => routeToContent(item.contentType, item.id, item.$thisEp.id, item)
 
 watch([category, type], () => void list.run())
 watch(

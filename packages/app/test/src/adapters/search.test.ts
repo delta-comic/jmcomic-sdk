@@ -1,11 +1,12 @@
-import { SharedFunction } from '@delta-comic/utils'
 import { SortType } from 'jmcomic-sdk'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { contentKeys, pluginName, searchKeys, subscribeKeys } from '@/constants'
-import { runtime } from '@/runtime/PluginRuntime'
 
-import {
+import { createTestService } from '../../context'
+const { service, runtime } = createTestService()
+
+const {
   barcode,
   blogSearch,
   comicSearch,
@@ -16,7 +17,7 @@ import {
   mapWeekContent,
   novelSearch,
   searchMethods,
-} from './search'
+} = service.search
 
 const comic = {
   id: 1,
@@ -170,7 +171,6 @@ describe('search adapters', () => {
     await expect(subscription.fetchAuthorContent.query({ author }, 1)).resolves.toMatchObject({
       data: [{ id: 'new' }],
     })
-    expect(SharedFunction.call).not.toHaveBeenCalled()
   })
 
   test('keeps unchanged authors and routes subscription kinds', async () => {

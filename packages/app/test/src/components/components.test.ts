@@ -1,13 +1,17 @@
-import { UniContentPage, UniImage, UniItem } from '@delta-comic/model'
-import { flushPromises, mount } from '@vue/test-utils'
+import { UniImage, UniItem } from '@delta-comic/client'
+import { config, flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, test, vi } from 'vitest'
 
+import RichTextReader from '@/components/content/RichTextReader.vue'
+import SafeRichText from '@/components/content/SafeRichText.vue'
+import JmItemCard from '@/components/JmItemCard.vue'
+import ResolvedImage from '@/components/ResolvedImage.vue'
 import { pluginName } from '@/constants'
+import { serviceKey } from '@/runtime/injection'
 
-import RichTextReader from './content/RichTextReader.vue'
-import SafeRichText from './content/SafeRichText.vue'
-import JmItemCard from './JmItemCard.vue'
-import ResolvedImage from './ResolvedImage.vue'
+import { createTestService } from '../../context'
+const { service } = createTestService()
+config.global.provide = { [serviceKey]: service }
 
 class TestItem extends UniItem {
   public override async like() {}
@@ -104,7 +108,8 @@ describe('shared UI components', () => {
       .fn()
       .mockRejectedValueOnce(new Error('offline'))
       .mockResolvedValue('<p>Loaded</p>')
-    const page = { loadRichText } as unknown as UniContentPage
+    const page = new service.pages.blog(undefined, '1', '1')
+    vi.spyOn(page, 'loadRichText').mockImplementation(loadRichText)
     const wrapper = mount(RichTextReader, { props: { page } })
     await flushPromises()
     expect(wrapper.text()).toContain('offline')

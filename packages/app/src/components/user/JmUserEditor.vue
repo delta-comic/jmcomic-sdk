@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import type { Gender, UserEdit } from 'jmcomic-sdk'
+import type { UserEdit } from 'jmcomic-sdk'
 import { NAlert, NButton, NForm, NFormItem, NInput, NSelect, NSpin } from 'naive-ui'
 import { computed, onMounted, reactive, ref } from 'vue'
 
-import { translate } from '@/i18n'
-import { runtime } from '@/runtime/PluginRuntime'
+import { useTranslate } from '@/i18n'
+import { useJmcomic } from '@/runtime/injection'
 import { useAsyncTask } from '@/runtime/useAsyncTask'
+
+const translate = useTranslate()
+
+const { runtime } = useJmcomic()
 
 const uid = computed(() => runtime.jm.auth.session?.user?.uid)
 const form = reactive<Partial<UserEdit>>({})
@@ -21,7 +25,9 @@ const profile = useAsyncTask(async signal => {
 
 const genderValue = computed<string>({
   get: () => form.gender ?? 'null',
-  set: value => (form.gender = value === 'null' ? null : (value as Gender)),
+  set: value => {
+    form.gender = value === 'Male' || value === 'Female' ? value : null
+  },
 })
 const genderOptions = [
   { label: translate('jmcomic.gender.male'), value: 'Male' },

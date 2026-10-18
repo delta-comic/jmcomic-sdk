@@ -2,10 +2,12 @@ import type { BlogComment, ComicComment, FullComic, NovelComment, RelatedBook } 
 import { describe, expect, test, vi } from 'vitest'
 
 import { pluginName } from '@/constants'
-import { runtime } from '@/runtime/PluginRuntime'
 
-import { fromBlogComment, fromComicComment, fromNovelComment } from './comments'
-import { fromFullComic, fromRelatedBook } from './items'
+import { createTestService } from '../../context'
+const { service, runtime } = createTestService()
+
+const { fromBlogComment, fromComicComment, fromNovelComment } = service.comments
+const { fromFullComic, fromRelatedBook } = service.items
 
 const fullComic: FullComic = {
   id: 42,

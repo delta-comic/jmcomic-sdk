@@ -1,19 +1,22 @@
-import { SharedFunction } from '@delta-comic/utils'
-import { flushPromises, mount } from '@vue/test-utils'
+import { routeToContent } from '@delta-comic/client'
+import { config, flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
+import CreatorReader from '@/components/content/CreatorReader.vue'
+import JmCommentRow from '@/components/JmCommentRow.vue'
+import PromoteTab from '@/components/search/PromoteTab.vue'
+import WeekBestTab from '@/components/search/WeekBestTab.vue'
+import BadgeManager from '@/components/user/BadgeManager.vue'
+import JmUserCard from '@/components/user/JmUserCard.vue'
+import JmUserEditor from '@/components/user/JmUserEditor.vue'
+import TitleManager from '@/components/user/TitleManager.vue'
 import { pluginName } from '@/constants'
-import { JmUser } from '@/models/items'
-import { runtime } from '@/runtime/PluginRuntime'
+import { serviceKey } from '@/runtime/injection'
 
-import CreatorReader from './content/CreatorReader.vue'
-import JmCommentRow from './JmCommentRow.vue'
-import PromoteTab from './search/PromoteTab.vue'
-import WeekBestTab from './search/WeekBestTab.vue'
-import BadgeManager from './user/BadgeManager.vue'
-import JmUserCard from './user/JmUserCard.vue'
-import JmUserEditor from './user/JmUserEditor.vue'
-import TitleManager from './user/TitleManager.vue'
+import { createTestService } from '../../context'
+const { service, runtime } = createTestService()
+const { JmUser } = service.items
+config.global.provide = { [serviceKey]: service }
 
 const comic = {
   id: 1,
@@ -35,28 +38,27 @@ afterEach(() => {
 
 describe('content and account screens', () => {
   test('renders a creator work grid', async () => {
-    const creator = mount(CreatorReader, {
-      props: {
-        page: {
-          loadAuthor: vi
-            .fn()
-            .mockResolvedValue({
-              author_name: 'Creator',
-              author_avatar: 'https://example.com/avatar.jpg',
-              background_image: 'https://example.com/banner.jpg',
-              related_works: [
-                {
-                  id: 2,
-                  work_title: 'Work',
-                  work_image: 'https://example.com/work.jpg',
-                  work_date: '2026-01-01',
-                  platform_name: 'source',
-                },
-              ],
-            }),
-        } as never,
-      },
+    const page = new service.pages['book-author'](undefined, '1', '1')
+    vi.spyOn(page, 'loadAuthor').mockResolvedValue({
+      author_name: 'Creator',
+      author_id: '1',
+      work_title: '',
+      work_date: '',
+      sponsor: [],
+      filters: { language: [], source: [] },
+      author_avatar: 'https://example.com/avatar.jpg',
+      background_image: 'https://example.com/banner.jpg',
+      related_works: [
+        {
+          id: 2,
+          work_title: 'Work',
+          work_image: 'https://example.com/work.jpg',
+          work_date: '2026-01-01',
+          platform_name: 'source',
+        },
+      ],
     })
+    const creator = mount(CreatorReader, { props: { page } })
     await flushPromises()
     expect(creator.text()).toContain('Creator')
     expect(creator.text()).toContain('Work')
@@ -70,13 +72,7 @@ describe('content and account screens', () => {
       props: { isActive: true, tabbar: { id: '1', title: 'Promote', comp: PromoteTab } },
     })
     await promoted.get('article').trigger('click')
-    expect(SharedFunction.call).toHaveBeenCalledWith(
-      'routeToContent',
-      [pluginName, 'comic'],
-      '1',
-      '1',
-      expect.anything(),
-    )
+    expect(routeToContent).toHaveBeenCalledWith([pluginName, 'comic'], '1', '1', expect.anything())
 
     runtime.weekBest = {
       categories: [{ id: '1', title: 'Week', time: 'week' }],

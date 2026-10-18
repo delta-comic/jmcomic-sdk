@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import type { UniContentPage, UniItem } from '@delta-comic/model'
+import type { UniContentPage, UniItem } from '@delta-comic/client'
 import { NAlert, NButton, NSpin } from 'naive-ui'
 import { onMounted } from 'vue'
 
-import { translate } from '@/i18n'
+import { useTranslate } from '@/i18n'
+import { useJmcomic } from '@/runtime/injection'
 import { useAsyncTask } from '@/runtime/useAsyncTask'
 
 import SafeRichText from './SafeRichText.vue'
 
-interface RichTextLoader extends UniContentPage {
-  loadRichText(signal?: AbortSignal): Promise<string>
-}
+const translate = useTranslate()
 
 interface Props {
   page: UniContentPage
@@ -18,7 +17,12 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const content = useAsyncTask(signal => (props.page as RichTextLoader).loadRichText(signal))
+const { pages } = useJmcomic()
+const content = useAsyncTask(signal => {
+  if (!(props.page instanceof pages.blog || props.page instanceof pages.novel))
+    throw new Error(translate('jmcomic.state.error'))
+  return props.page.loadRichText(signal)
+})
 onMounted(content.run)
 </script>
 

@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 
-import { parseRichText, richTextToPlainText } from './richText'
-import { createArrayStream, createPagedStream } from './stream'
+import { parseRichText, richTextToPlainText } from '@/adapters/richText'
+import { createArrayStream, createPagedStream } from '@/adapters/stream'
 
 describe('rich text adapter', () => {
   test('keeps only structured safe blocks', () => {

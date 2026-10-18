@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { UniItem } from '@delta-comic/model'
-import type { Content } from '@delta-comic/plugin'
-import { SharedFunction } from '@delta-comic/utils'
+import type { UniItem } from '@delta-comic/client'
+import type { Content } from '@delta-comic/client'
+import { routeToContent } from '@delta-comic/client'
 import { computed } from 'vue'
 
-import { mapPromoteContent } from '@/adapters/search'
 import JmItemCard from '@/components/JmItemCard.vue'
-import { runtime } from '@/runtime/PluginRuntime'
+import { useJmcomic } from '@/runtime/injection'
+
+const { runtime, search: searchApi } = useJmcomic()
 
 interface Props {
   isActive: boolean
@@ -14,10 +15,9 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const items = computed(() => runtime.promotes.flatMap(mapPromoteContent))
+const items = computed(() => runtime.promotes.flatMap(searchApi.mapPromoteContent))
 
-const openItem = (item: UniItem) =>
-  SharedFunction.call('routeToContent', item.contentType, item.id, item.$thisEp.id, item)
+const openItem = (item: UniItem) => routeToContent(item.contentType, item.id, item.$thisEp.id, item)
 </script>
 
 <template>

@@ -3,12 +3,16 @@ import type { BadgeItem } from 'jmcomic-sdk'
 import { NAlert, NButton, NSpin, NTabPane, NTabs } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 
-import { translate } from '@/i18n'
+import { useTranslate } from '@/i18n'
 import { image } from '@/models/items'
-import { runtime } from '@/runtime/PluginRuntime'
+import { useJmcomic } from '@/runtime/injection'
 import { useAsyncTask } from '@/runtime/useAsyncTask'
 
 import ResolvedImage from '../ResolvedImage.vue'
+
+const translate = useTranslate()
+
+const { runtime } = useJmcomic()
 
 const operationError = ref('')
 const operationLoading = ref(false)

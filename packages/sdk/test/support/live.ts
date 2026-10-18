@@ -304,12 +304,14 @@ export const getTestSdk = () =>
     const sdk = new JMComic({ retry: 1, timeout: 15_000 })
     try {
       await sdk.fork.autoPickFork()
+      console.info('[SDK contract] using live API')
       return { live: true, sdk }
     } catch {
       if (!fallbackStarted) {
         fallbackServer.listen({ onUnhandledRequest: 'error' })
         fallbackStarted = true
       }
+      console.info('[SDK contract] using local response fixtures')
       sdk.config.requestUsingFork = 'https://fallback.jm.test'
       return { live: false, sdk }
     }

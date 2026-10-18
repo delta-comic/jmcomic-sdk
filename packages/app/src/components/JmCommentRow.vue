@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import type { UniComment, UniItem } from '@delta-comic/model'
+import type { UniComment, UniItem } from '@delta-comic/client'
 import { NButton, NInput } from 'naive-ui'
 import { ref } from 'vue'
 
 import ResolvedImage from '@/components/ResolvedImage.vue'
-import { translate } from '@/i18n'
+import { useTranslate } from '@/i18n'
+
+const translate = useTranslate()
 
 interface Props {
   comment: UniComment
