@@ -33,32 +33,35 @@ describe.sequential('production API contract', () => {
     expect(weekList.total).toBeGreaterThanOrEqual(weekList.list.length)
   })
 
-  test('follows a comic from search through pages and comments', { timeout: 30_000 }, async () => {
-    const { sdk } = await getTestSdk()
-    const result = await sdk.comic.searchByKeyword({
-      keyword: '你',
-      order: SortType.Relate,
-      page: 1,
-    })
-    // Keep the chapter contract tied to a long-lived public fixture. The live search index can
-    // temporarily return removed entries, for which the service intentionally says "illegal".
-    const comicId = 350_234
-    const detail = await sdk.comic.getInfo({ id: comicId })
-    const [pages, comments, categoryResult] = await Promise.all([
-      sdk.comic.getPages({ id: comicId }),
-      sdk.comic.getComments({ id: comicId, page: 1 }),
-      sdk.comic.searchByCategory({
-        category: result.list[0]!.category.id ?? '',
+  test(
+    'searches comics and loads chapter, comment and category contracts',
+    { timeout: 30_000 },
+    async () => {
+      const { sdk } = await getTestSdk()
+      const result = await sdk.comic.searchByKeyword({
+        keyword: '你',
         order: SortType.Relate,
         page: 1,
-      }),
-    ])
-    expect(result.list.length).toBeGreaterThan(0)
-    expect(String(detail.id)).toBe(String(comicId))
-    expect(pages.every(path => path.startsWith('/media/photos/'))).toBe(true)
-    expect(comments.total).toBeGreaterThanOrEqual(comments.list.length)
-    expect(categoryResult.total).toBeGreaterThanOrEqual(categoryResult.list.length)
-  })
+      })
+      // Keep the chapter contract tied to a long-lived public fixture. The live search index can
+      // temporarily return removed entries, for which the service intentionally says "illegal".
+      const comicId = 350_234
+      const detail = await sdk.comic.getInfo({ id: comicId })
+      const categories = await sdk.promote.getCategories()
+      const category = categories.categories[0]
+      expect(category).toBeDefined()
+      const [pages, comments, categoryResult] = await Promise.all([
+        sdk.comic.getPages({ id: comicId }),
+        sdk.comic.getComments({ id: comicId, page: 1 }),
+        sdk.comic.searchByCategory({ category: category!.slug, order: SortType.Relate, page: 1 }),
+      ])
+      expect(result.total).toBeGreaterThanOrEqual(result.list.length)
+      expect(String(detail.id)).toBe(String(comicId))
+      expect(pages.every(path => path.startsWith('/media/photos/'))).toBe(true)
+      expect(comments.total).toBeGreaterThanOrEqual(comments.list.length)
+      expect(categoryResult.total).toBeGreaterThanOrEqual(categoryResult.list.length)
+    },
+  )
 
   test('parses posts and novels from real responses', { timeout: 30_000 }, async () => {
     const { sdk } = await getTestSdk()

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { UniItem } from '@delta-comic/model'
+import type { UniItem } from '@delta-comic/client'
 import { computed } from 'vue'
 
 import ResolvedImage from '@/components/ResolvedImage.vue'

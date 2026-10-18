@@ -8,9 +8,16 @@ import type {
 } from 'jmcomic-sdk'
 import { describe, expect, test, vi } from 'vitest'
 
-import { runtime } from '@/runtime/PluginRuntime'
+import { createTestService } from '../../context'
+const { service, runtime } = createTestService()
 
-import { BlogPage, BookAuthorPage, BookPage, ComicPage, NovelPage } from './pages'
+const {
+  blog: BlogPage,
+  'book-author': BookAuthorPage,
+  book: BookPage,
+  comic: ComicPage,
+  novel: NovelPage,
+} = service.pages
 
 const expInfo = {
   level_name: 'Level',

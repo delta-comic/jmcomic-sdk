@@ -2,6 +2,7 @@ const zhCN = {
   jmcomic: {
     action: {
       like: '点赞',
+      more: '加载更多',
       reply: '回复',
       retry: '重试',
       save: '保存',
@@ -11,7 +12,9 @@ const zhCN = {
     auth: {
       email: '邮箱',
       gender: '性别',
+      invalidGender: '请选择性别',
       login: '登录',
+      logout: '退出登录',
       password: '密码',
       passwordConfirm: '确认密码',
       required: '请先登录禁漫天堂',
@@ -19,7 +22,7 @@ const zhCN = {
       username: '用户名',
     },
     badge: { all: '勋章商店', buy: '购买', mine: '我的勋章', owned: '已拥有' },
-    comment: { placeholder: '写下评论…' },
+    comment: { placeholder: '写下评论…', missingBlogId: '评论缺少图文编号' },
     gender: { female: '女', male: '男', unspecified: '未指定' },
     item: {
       actor: '角色',
@@ -43,7 +46,7 @@ const zhCN = {
       preload: '预加载禁漫数据',
     },
     reader: { page: '第 {page} 页' },
-    remotes: { api: 'API 分流', autoSelect: '自动选择' },
+    remotes: { api: 'API 分流', autoSelect: '自动选择', images: '图片分流' },
     search: {
       barcode: 'JM 编号',
       blog: '图文',

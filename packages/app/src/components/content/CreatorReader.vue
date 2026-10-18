@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import type { UniContentPage, UniItem } from '@delta-comic/model'
-import type { BookAuthor } from 'jmcomic-sdk'
+import type { UniContentPage, UniItem } from '@delta-comic/client'
 import { NAlert, NButton, NSpin } from 'naive-ui'
 import { onMounted } from 'vue'
 
 import JmItemCard from '@/components/JmItemCard.vue'
 import ResolvedImage from '@/components/ResolvedImage.vue'
-import { translate } from '@/i18n'
-import { fromRelatedBook, image } from '@/models/items'
+import { useTranslate } from '@/i18n'
+import { image } from '@/models/items'
+import { useJmcomic } from '@/runtime/injection'
 import { useAsyncTask } from '@/runtime/useAsyncTask'
 
-interface CreatorLoader extends UniContentPage {
-  loadAuthor(signal?: AbortSignal): Promise<BookAuthor>
-}
+const translate = useTranslate()
 
 interface Props {
   page: UniContentPage
@@ -20,7 +18,12 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const creator = useAsyncTask(signal => (props.page as CreatorLoader).loadAuthor(signal))
+const { items: itemModels, pages } = useJmcomic()
+const creator = useAsyncTask(signal => {
+  if (!(props.page instanceof pages['book-author']))
+    throw new Error(translate('jmcomic.state.error'))
+  return props.page.loadAuthor(signal)
+})
 onMounted(creator.run)
 </script>
 
@@ -61,7 +64,7 @@ onMounted(creator.run)
       <JmItemCard
         v-for="work in creator.data.value.related_works"
         :key="String(work.id)"
-        :item="fromRelatedBook(work)"
+        :item="itemModels.fromRelatedBook(work)"
       />
     </div>
   </div>

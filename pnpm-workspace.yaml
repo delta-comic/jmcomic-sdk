@@ -9,12 +9,6 @@ allowBuilds:
 catalog:
   '@commitlint/cli': ^21.2.2
   '@commitlint/config-conventional': ^21.2.2
-  '@delta-comic/plugin': '3.0.0-next.19'
-  '@delta-comic/db': '3.0.0-next.19'
-  '@delta-comic/model': '3.0.0-next.19'
-  '@delta-comic/ui': '3.0.0-next.19'
-  '@delta-comic/utils': '3.0.0-next.19'
-  '@delta-comic/plugin-layout': '0.10.0-next.9'
   '@semantic-release/commit-analyzer': ^13.0.1
   '@semantic-release/github': ^12.0.9
   '@semantic-release/release-notes-generator': ^14.1.1
@@ -62,11 +56,3 @@ peerDependencyRules:
 
 minimumReleaseAgeExclude:
   - browserslist
-  - '@delta-comic/db@3.0.0-next.19'
-  - '@delta-comic/plugin-layout@0.10.0-next.7 || 0.10.0-next.8 || 0.10.0-next.9'
-  - '@delta-comic/downloader@3.0.0-next.19'
-  - '@delta-comic/logger@3.0.0-next.19'
-  - '@delta-comic/model@3.0.0-next.19'
-  - '@delta-comic/plugin@3.0.0-next.19'
-  - '@delta-comic/ui@3.0.0-next.19'
-  - '@delta-comic/utils@3.0.0-next.19'

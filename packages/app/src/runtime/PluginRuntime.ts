@@ -1,6 +1,7 @@
-import { db } from '@delta-comic/db'
+import type { ClientConfig, ClientI18n, ClientNetwork } from '@delta-comic/client'
 import {
   JMComic,
+  sUserMe,
   type CategoriesResult,
   type JmSession,
   type LoginData,
@@ -12,17 +13,18 @@ import { BrowserImageDecoder } from 'jmcomic-sdk/browser'
 
 import { pluginName } from '@/constants'
 
-const sessionKey = 'session'
-
-const parseSession = (value: string): JmSession | undefined => {
-  try {
-    const session = JSON.parse(value) as Partial<JmSession>
-    if (typeof session.username !== 'string') return undefined
-    if (session.token !== undefined && typeof session.token !== 'string') return undefined
-    return session as JmSession
-  } catch {
-    return undefined
-  }
+const parseSession = (value: unknown): JmSession | undefined => {
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    !('username' in value) ||
+    typeof value.username !== 'string'
+  )
+    return
+  if (!('token' in value) || typeof value.token !== 'string') return
+  const user = 'user' in value ? sUserMe.safeParse(value.user) : undefined
+  if (!user?.success) return
+  return { username: value.username, token: value.token, user: user.data }
 }
 
 export class PluginRuntime {
@@ -30,103 +32,119 @@ export class PluginRuntime {
   public categories?: CategoriesResult
   public promotes: PromoteItem[] = []
   public weekBest?: WeekBest
-  private controller = new AbortController()
+  private readonly controller = new AbortController()
+
+  public constructor(
+    private readonly config: ClientConfig,
+    private readonly i18n: ClientI18n,
+    network: ClientNetwork,
+  ) {
+    const saved = config.get(pluginName)
+    if (typeof saved.baseUrl === 'string') this.jm.config.requestUsingFork = saved.baseUrl
+    const create = this.jm.requester.create.bind(this.jm.requester)
+    this.jm.requester.create = options =>
+      create({
+        ...options,
+        fetch: (request, init) =>
+          network.request({
+            url: request,
+            init: {
+              ...init,
+              signal: this.combineSignal(
+                init?.signal ?? (request instanceof Request ? request.signal : undefined),
+              ),
+            },
+          }),
+      })
+  }
 
   public get signal() {
     return this.controller.signal
   }
 
-  public start(baseUrl?: string | false): void {
-    if (this.controller.signal.aborted) this.controller = new AbortController()
-    if (baseUrl) this.jm.config.requestUsingFork = baseUrl
+  public combineSignal(signal?: AbortSignal): AbortSignal {
+    return signal ? AbortSignal.any([this.signal, signal]) : this.signal
+  }
+
+  public translate(key: string, params?: Record<string, number | string>): string {
+    return this.i18n.translate(key, params)
   }
 
   public async restoreSession(): Promise<JmSession | undefined> {
-    const saved = await db
-      .selectFrom('nativeStore')
-      .select('value')
-      .where('namespace', '=', pluginName)
-      .where('key', '=', sessionKey)
-      .executeTakeFirst()
-    if (!saved) return undefined
-    const session = parseSession(saved.value)
-    if (!session) {
-      await this.clearSession()
-      return undefined
-    }
-    this.jm.auth.restoreSession(session)
+    const value = this.config.get(pluginName).session
+    const session = parseSession(value)
+    if (session) this.jm.auth.restoreSession(session)
+    else if (value !== undefined) await this.clearSession()
     return session
   }
 
   public async validateSession(signal = this.signal): Promise<LoginUser | undefined> {
     const session = this.jm.auth.session
-    const user = session?.user
-    if (!session?.token || !user) return undefined
+    if (!session?.token || !session.user) return
     try {
-      await this.jm.user.getUser({ uid: user.uid }, signal)
-      return { username: session.username, user }
-    } catch {
+      await this.jm.user.getUser({ uid: session.user.uid }, this.combineSignal(signal))
+      return { username: session.username, user: session.user }
+    } catch (error) {
+      if (this.combineSignal(signal).aborted) throw error
       await this.clearSession()
       return undefined
     }
   }
 
   public async login(data: LoginData, signal = this.signal): Promise<LoginUser> {
-    const login = await this.jm.auth.login(data, signal)
+    const result = await this.jm.auth.login(data, this.combineSignal(signal))
+    this.signal.throwIfAborted()
     await this.persistSession()
-    return login
+    return result
   }
 
   public async persistSession(): Promise<void> {
+    this.signal.throwIfAborted()
     const session = this.jm.auth.session
     if (!session) return
-    const stored: JmSession = {
-      username: session.username,
-      token: session.token,
-      avs: session.avs,
-      user: session.user,
-    }
-    await db
-      .replaceInto('nativeStore')
-      .values({ namespace: pluginName, key: sessionKey, value: JSON.stringify(stored) })
-      .execute()
+    await this.config.set(pluginName, {
+      ...this.config.get(pluginName),
+      session: {
+        username: session.username,
+        token: session.token,
+        avs: session.avs,
+        user: session.user,
+      },
+    })
   }
 
   public async clearSession(): Promise<void> {
     this.jm.auth.clearSession()
-    await db
-      .deleteFrom('nativeStore')
-      .where('namespace', '=', pluginName)
-      .where('key', '=', sessionKey)
-      .execute()
+    const { session: _session, ...config } = this.config.get(pluginName)
+    await this.config.set(pluginName, config)
+  }
+
+  public async logout(): Promise<void> {
+    try {
+      await this.jm.auth.logout(this.signal)
+    } finally {
+      await this.clearSession()
+    }
   }
 
   public async preload(signal = this.signal): Promise<void> {
+    const combined = this.combineSignal(signal)
     const [categories, promotes, weekBest] = await Promise.all([
-      this.jm.promote.getCategories(signal),
-      this.jm.promote.getPromotes(signal),
-      this.jm.promote.getWeekBestCate(signal),
+      this.jm.promote.getCategories(combined),
+      this.jm.promote.getPromotes(combined),
+      this.jm.promote.getWeekBestCate(combined),
     ])
+    combined.throwIfAborted()
     this.categories = categories
     this.promotes = promotes
     this.weekBest = weekBest
   }
 
-  public async testFork(fork: string, signal: AbortSignal): Promise<void> {
-    await this.jm.requester
-      .create({ baseUrl: fork, retry: 0, timeout: 8_000 })
-      .get(this.jm.config.forkTestPath, { signal })
-      .text()
-  }
-
   public shutdown(): void {
     this.controller.abort()
-  }
-
-  public async uninstall(): Promise<void> {
-    this.shutdown()
-    await this.clearSession()
+    this.jm.auth.clearSession()
+    this.categories = undefined
+    this.promotes = []
+    this.weekBest = undefined
   }
 }
-
-export const runtime = new PluginRuntime()

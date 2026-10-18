@@ -1,4 +1,3 @@
-import { resolve } from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
 
 import browserslist from 'browserslist'
@@ -10,9 +9,7 @@ import { pluginName } from './src/constants.ts'
 
 const testTsconfig = fileURLToPath(new URL('./tsconfig.app.json', import.meta.url))
 
-import { DELTA_COMIC_PLUGIN_API_VERSION } from '@delta-comic/model'
-
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   base: './',
   build: {
     rollupOptions: {
@@ -28,44 +25,24 @@ export default defineConfig(({ mode }) => ({
     transformer: 'lightningcss',
   },
   plugins: lazyPlugins(async () => {
-    const [{ deltaComic }, { default: tailwindcss }, { default: vue }, { dts }] = await Promise.all(
-      [
-        import('@delta-comic/plugin/vite'),
-        import('@tailwindcss/vite'),
-        import('@vitejs/plugin-vue'),
-        import('rolldown-plugin-dts'),
-      ],
-    )
-    const pluginLayoutId = mode === 'test' ? undefined : 'layout'
-
+    const [{ deltaComic }, { default: tailwindcss }, { default: vue }] = await Promise.all([
+      import('@delta-comic/client/vite'),
+      import('@tailwindcss/vite'),
+      import('@vitejs/plugin-vue'),
+    ])
     return [
       vue(),
       tailwindcss(),
       deltaComic({
-        apiVersion: DELTA_COMIC_PLUGIN_API_VERSION,
+        protocolVersion: 2,
+        id: pluginName,
+        name: '禁漫天堂',
         author: 'wenxig',
         description: '为 Delta Comic 提供禁漫天堂的漫画、图文、小说和创作者画册内容',
-        name: { display: '禁漫天堂', id: pluginName },
-        require: [
-          { id: 'core' },
-          ...(pluginLayoutId
-            ? [{ id: pluginLayoutId, download: 'gh:delta-comic/delta-comic-plugin-layout' }]
-            : []),
-        ],
-        version: {
-          plugin: process.env.DELTA_PLUGIN_VERSION ?? packageJson.version,
-          supportCore: '>=3.0.0-next.19 <4.0.0',
-        },
+        client: { entry: 'index.js' },
+        resources: [],
+        version: process.env.DELTA_PLUGIN_VERSION ?? packageJson.version,
       }),
-      ...(mode === 'test'
-        ? []
-        : [
-            dts({
-              vue: true,
-              tsconfig: resolve(import.meta.dirname, './tsconfig.app.json'),
-              sourcemap: true,
-            }),
-          ]),
     ]
   }),
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
@@ -93,13 +70,13 @@ export default defineConfig(({ mode }) => ({
   test: {
     name: 'app',
     environment: 'happy-dom',
-    include: ['src/**/*.test.ts'],
-    setupFiles: ['./src/test/setup.ts'],
+    include: ['test/src/**/*.test.ts'],
+    setupFiles: ['./test/setup.ts'],
     typecheck: {
       enabled: true,
       checker: 'vue-tsc',
       tsconfig: testTsconfig,
-      include: ['src/**/*.test-d.ts'],
+      include: ['test/src/**/*.test-d.ts'],
     },
   },
-}))
+})

@@ -13,6 +13,7 @@
     "build": "vp run -t @delta-comic/plugin-jmcomic#build",
     "check": "vp check",
     "dev": "vp run --filter @delta-comic/plugin-jmcomic dev",
+    "lib-build": "vp run --filter jmcomic-sdk build",
     "release": "vp exec semantic-release",
     "release:dry-run": "vp exec semantic-release --dry-run",
     "release:preview": "node ./script/release-branches.mts preview",
