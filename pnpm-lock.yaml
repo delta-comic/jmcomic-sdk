@@ -249,8 +249,8 @@ importers:
   packages/app:
     dependencies:
       '@delta-comic/client':
-        specifier: 3.0.0-next.20
-        version: 3.0.0-next.20(vue@3.6.0-rc.12(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
+        specifier: 3.0.0-next.23
+        version: 3.0.0-next.23(vite-plus@0.2.9(@types/node@25.9.3)(@vitest/coverage-v8@4.1.10)(@voidzero-dev/vite-plus-core@0.2.9(@types/node@25.9.3)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))(happy-dom@20.14.6)(jiti@2.7.0)(msw@2.15.0(@types/node@25.9.3)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))(vue@3.6.0-rc.12(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))
       '@vicons/material':
         specifier: 'catalog:'
         version: 0.13.0
@@ -496,12 +496,13 @@ packages:
     peerDependencies:
       vue: ^3.0.11
 
-  '@delta-comic/both@3.0.0-next.20':
-    resolution: {integrity: sha512-GTEWSC3sNulJEEhlMh8palwbzYOmEmKAmZ380V53duTssBvx7RtFc7FcpqARKQzDUrE3if5airMPVDU5jF3qVg==, tarball: https://npm.pkg.github.com/download/@delta-comic/both/3.0.0-next.20/7f6f4d178c119569a3966048129a4c89208d1962}
+  '@delta-comic/both@3.0.0-next.23':
+    resolution: {integrity: sha512-nSZMFgDTb7YqZjXLY2rUU5edATCni1LhXXUJ9NPrxLfJps3/oggdQlnO0FiYcivyI+tQtZq/IFyzra7LYOCCUg==, tarball: https://npm.pkg.github.com/download/@delta-comic/both/3.0.0-next.23/d7b5b80ce1ba28c366b0b307f0976a1dd65fe220}
 
-  '@delta-comic/client@3.0.0-next.20':
-    resolution: {integrity: sha512-kuqcWaaR07SNox3jOW7sYLE59JoF0XGwaWhq5My2jX58AJzLrwi4LIOAwKFv8mVPfj736AF6dagM4fSMCeqZ1g==, tarball: https://npm.pkg.github.com/download/@delta-comic/client/3.0.0-next.20/723b5a56bdf6873ba51bfd55184fd0fa3e12ae8a}
+  '@delta-comic/client@3.0.0-next.23':
+    resolution: {integrity: sha512-cpzY2h+Nof3pSRxYtRt9/0JQroZjTQdyci1u2Vxxrcdty9fyA/eADTUxGfcOuUT6/tZgXcNaV8KIAfFu4uRLlw==, tarball: https://npm.pkg.github.com/download/@delta-comic/client/3.0.0-next.23/9cd5143541a2c0fed0c7aa6d4eb218a5ce47b980}
     peerDependencies:
+      vite-plus: 1.0.0
       vue: ^3.6.0-rc.10
 
   '@emnapi/runtime@1.11.3':
@@ -3905,7 +3906,7 @@ snapshots:
     dependencies:
       vue: 3.6.0-rc.12(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)
 
-  '@delta-comic/both@3.0.0-next.20':
+  '@delta-comic/both@3.0.0-next.23':
     dependencies:
       cordis: 4.0.0-rc.11
       typebox: 1.4.2
@@ -3913,12 +3914,13 @@ snapshots:
       - '@cordisjs/plugin-include'
       - '@cordisjs/plugin-loader'
 
-  '@delta-comic/client@3.0.0-next.20(vue@3.6.0-rc.12(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))':
+  '@delta-comic/client@3.0.0-next.23(vite-plus@0.2.9(@types/node@25.9.3)(@vitest/coverage-v8@4.1.10)(@voidzero-dev/vite-plus-core@0.2.9(@types/node@25.9.3)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))(happy-dom@20.14.6)(jiti@2.7.0)(msw@2.15.0(@types/node@25.9.3)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))(vue@3.6.0-rc.12(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))':
     dependencies:
-      '@delta-comic/both': 3.0.0-next.20
+      '@delta-comic/both': 3.0.0-next.23
       cordis: 4.0.0-rc.11
       kysely: 0.30.0-beta.2
       typebox: 1.4.2
+      vite-plus: 0.2.9(@types/node@25.9.3)(@vitest/coverage-v8@4.1.10)(@voidzero-dev/vite-plus-core@0.2.9(@types/node@25.9.3)(jiti@2.7.0)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))(happy-dom@20.14.6)(jiti@2.7.0)(msw@2.15.0(@types/node@25.9.3)(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2))(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)
       vue: 3.6.0-rc.12(typescript-native-bridge@6.0.3-bridge.8.tsgo.7.0.2)
     transitivePeerDependencies:
       - '@cordisjs/plugin-include'

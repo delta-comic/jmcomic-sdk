@@ -56,3 +56,5 @@ peerDependencyRules:
 
 minimumReleaseAgeExclude:
   - browserslist
+  - '@delta-comic/both@3.0.0-next.23'
+  - '@delta-comic/client@3.0.0-next.23'

@@ -10,7 +10,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@delta-comic/client": "3.0.0-next.20",
+    "@delta-comic/client": "3.0.0-next.23",
     "@vicons/material": "catalog:",
     "jmcomic-sdk": "workspace:*",
     "naive-ui": "catalog:",
