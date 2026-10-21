@@ -41,6 +41,6 @@
 - 当前工作区干净，位于 develop 分支且领先 origin 1 个提交；开始运行规范检查并确认宿主能力边界。
 - SDK 构建、`vp check` 通过；首次递归 typecheck 暴露宿主 `@delta-comic/client@next.23` 声明引用未安装的私有模型包，共 201 个级联错误。
 - 重建 Delta Comic 当前源码的 `@delta-comic/client` SDK 并复制本地 dist 后，jmcomic `vp run -r typecheck` 通过；`vp test run` 为 22 文件/105 通过/1 跳过；`vp run build` 成功生成 ZIP。
-- 宿主 `vp run --concurrency-limit 1 lib-build`、`vp check` 与 SDK 定向 typecheck 通过。宿主全递归 typecheck 遇到 `@delta-comic/client-core-plugin-vite` dist 未生成错误；独立 SDK typecheck 通过。
-- 宿主待处理清单：发布新的 `@delta-comic/client` 版本（当前 next.23 声明仍损坏，源码重建后已修复）；修正全仓递归 typecheck 的 plugin-vite 依赖构建顺序/覆盖。
-- 未发现需要修改 jmcomic 业务源码的问题；准备提交规划与验收记录。
+- 宿主 `vp run --concurrency-limit 1 lib-build`、`vp check`、SDK 定向 typecheck 和依序执行的全递归 typecheck 均通过。
+- 宿主待处理：通过项目规定的预览发布流程更新 `@delta-comic/client` 已发布声明产物；未进行发布。
+- 未发现需要修改 jmcomic 业务源码的问题。验证依赖临时覆盖的 Delta Comic 本地 SDK 产物；覆盖不属于仓库提交，也不代表已发布版本已修复。
