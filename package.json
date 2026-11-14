@@ -1,45 +1,68 @@
 {
-  "name": "delta-comic-plugin-jmcomic",
+  "name": "@delta-comic/jmcomic",
   "private": true,
-  "description": "禁漫天堂的 Delta Comic v3 插件与 TypeScript SDK",
+  "description": "「天堂支点」",
+  "homepage": "https://github.com/delta-comic",
+  "bugs": {
+    "url": "https://github.com/delta-comic/jmcomic-sdk/issues",
+    "email": "wenxinguo12@gmail.com"
+  },
+  "license": "AGPL-3.0-only",
+  "author": {
+    "name": "wenxig",
+    "email": "wenxinguo12@gmail.com",
+    "url": "https://github.com/wenxig"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/delta-comic/jmcomic-sdk.git"
   },
   "type": "module",
-  "scripts": {
-    "branch:develop": "node ./script/release-branches.mts develop",
-    "branch:develop:dry-run": "node ./script/release-branches.mts develop --dry-run",
-    "build": "vp run -t @delta-comic/plugin-jmcomic#build",
-    "check": "vp check",
-    "dev": "vp run --filter @delta-comic/plugin-jmcomic dev",
-    "lib-build": "vp run --filter jmcomic-sdk build",
-    "release": "vp exec semantic-release",
-    "release:dry-run": "vp exec semantic-release --dry-run",
-    "release:preview": "node ./script/release-branches.mts preview",
-    "release:preview:dry-run": "node ./script/release-branches.mts preview --dry-run",
-    "release:stable": "node ./script/release-branches.mts stable",
-    "release:stable:dry-run": "node ./script/release-branches.mts stable --dry-run",
-    "test": "vp test",
-    "test:coverage": "vp test run --coverage",
-    "test:type": "vp test typecheck",
-    "typecheck": "vp run -r typecheck"
+  "dependencies": {
+    "@vizejs/vite-plugin": "catalog:"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",
     "@commitlint/config-conventional": "catalog:",
-    "@semantic-release/commit-analyzer": "catalog:",
-    "@semantic-release/github": "catalog:",
+    "@delta-comic/release-cli": "catalog:",
+    "@semantic-release/changelog": "catalog:",
     "@semantic-release/release-notes-generator": "catalog:",
-    "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "oxlint-tsgolint": "catalog:",
+    "commitlint-plugin-cspell": "catalog:",
+    "cspell": "catalog:",
+    "happy-dom": "catalog:",
     "semantic-release": "catalog:",
+    "tailwindcss": "catalog:",
+    "tsrs": "catalog:",
+    "twlinter": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:",
+    "vize": "catalog:",
     "vue-tsc": "catalog:"
   },
-  "packageManager": "pnpm@12.0.0-rc.3"
+  "badges": [
+    {
+      "description": "semantic-release: angular",
+      "href": "https://github.com/semantic-release/semantic-release",
+      "url": "https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release"
+    },
+    {
+      "description": "Repo License",
+      "href": "https://github.com/delta-comic/delta-comic/blob/main/LICENSE",
+      "url": "https://github.com/delta-comic/delta-comic/blob/main/LICENSE"
+    },
+    {
+      "description": "GitHub Downloads (all assets, all releases)",
+      "href": "https://github.com/delta-comic/delta-comic/releases/latest",
+      "url": "https://img.shields.io/github/downloads/delta-comic/delta-comic/total"
+    },
+    {
+      "description": "Wakatime",
+      "href": "https://wakatime.com/projects/delta-comic",
+      "url": "https://wakatime.com/badge/user/018cf362-35ff-48f2-af6b-61f09a441de4/project/9f2c18ca-6eec-4e82-8041-5d23c1aba440.svg"
+    }
+  ],
+  "packageManager": "pnpm@12.18.0",
+  "readme": "./README.md"
 }

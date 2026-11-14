@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { UserEdit } from 'jmcomic-sdk'
+import type { UserEdit } from '@delta-comic/jmcomic-sdk'
 import { NAlert, NButton, NForm, NFormItem, NInput, NSelect, NSpin } from 'naive-ui'
 import { computed, onMounted, reactive, ref } from 'vue'
 

@@ -1,5 +1,5 @@
 import { StreamQuery, type PageKey } from '@delta-comic/client'
-import type { PageResult } from 'jmcomic-sdk'
+import type { PageResult } from '@delta-comic/jmcomic-sdk'
 
 const getNextPage = (page: number, result: PageResult<unknown>, pageSize?: number) => {
   if (result.list.length === 0) return undefined

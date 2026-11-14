@@ -8,8 +8,8 @@ import {
   type LoginUser,
   type PromoteItem,
   type WeekBest,
-} from 'jmcomic-sdk'
-import { BrowserImageDecoder } from 'jmcomic-sdk/browser'
+} from '@delta-comic/jmcomic-sdk'
+import { BrowserImageDecoder } from '@delta-comic/jmcomic-sdk/browser'
 
 import { pluginName } from '@/constants'
 

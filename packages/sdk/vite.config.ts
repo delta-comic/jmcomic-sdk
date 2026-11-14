@@ -1,8 +1,4 @@
-import { fileURLToPath } from 'node:url'
-
 import { defineConfig } from 'vite-plus'
-
-const testTsconfig = fileURLToPath(new URL('./tsconfig.test.json', import.meta.url))
 
 export default defineConfig({
   pack: {
@@ -19,21 +15,13 @@ export default defineConfig({
       },
       'build': { command: 'vp pack', dependsOn: ['schema:generate'], cache: true },
       'typecheck': {
-        command: ['tsc -p tsconfig.app.json --noEmit', 'tsc -p tsconfig.node.json --noEmit'],
+        command: [
+          'tsrs --fast --runExternalCode -p tsconfig.app.json --noEmit',
+          'tsrs --fast --runExternalCode -p tsconfig.node.json --noEmit',
+        ],
         dependsOn: ['schema:generate'],
         cache: true,
       },
-    },
-  },
-  test: {
-    name: 'sdk',
-    environment: 'node',
-    include: ['./test/**/*.test.ts'],
-    typecheck: {
-      enabled: true,
-      checker: 'tsc',
-      tsconfig: testTsconfig,
-      include: ['./test/**/*.test-d.ts'],
     },
   },
 })

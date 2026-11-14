@@ -10,29 +10,21 @@
   },
   "type": "module",
   "dependencies": {
-    "@delta-comic/client": "3.0.0-next.20",
+    "@delta-comic/client": "catalog:",
+    "@delta-comic/jmcomic-sdk": "workspace:*",
     "@vicons/material": "catalog:",
-    "jmcomic-sdk": "workspace:*",
+    "cordis": "catalog:",
     "naive-ui": "catalog:",
     "vue": "catalog:"
   },
   "devDependencies": {
     "@tailwindcss/vite": "catalog:",
-    "@vitejs/plugin-vue": "catalog:",
-    "@vue/test-utils": "catalog:",
+    "@vizejs/vite-plugin": "catalog:",
     "browserslist": "catalog:",
     "es-toolkit": "catalog:",
     "happy-dom": "catalog:",
     "lightningcss": "catalog:",
-    "tailwindcss": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:",
-    "vite-plus": "catalog:",
-    "vitest": "catalog:",
     "vue-component-type-helpers": "catalog:",
     "vue-tsc": "catalog:"
-  },
-  "peerDependencies": {
-    "cordis": "^4.0.0-rc.10"
   }
 }

@@ -5,7 +5,7 @@ import {
   type ComicComment,
   type NovelComment,
   type Comment,
-} from 'jmcomic-sdk'
+} from '@delta-comic/jmcomic-sdk'
 
 import { richTextToPlainText } from '@/adapters/richText'
 import { contentKeys, pluginName } from '@/constants'

@@ -6,7 +6,7 @@ import {
   type UniContentViewComponent,
   type UniItem,
 } from '@delta-comic/client'
-import type { BlogDetail, BookAuthor, BookContents, FullNovel } from 'jmcomic-sdk'
+import type { BlogDetail, BookAuthor, BookContents, FullNovel } from '@delta-comic/jmcomic-sdk'
 
 import { createArrayStream, createPagedStream, emptyStream } from '@/adapters/stream'
 import CreatorReader from '@/components/content/CreatorReader.vue'

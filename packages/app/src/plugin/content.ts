@@ -1,5 +1,5 @@
 import type { Content } from '@delta-comic/client'
-import { SortType } from 'jmcomic-sdk'
+import { SortType } from '@delta-comic/jmcomic-sdk'
 
 import type { createSearch } from '@/adapters/search'
 import ReaderLayout from '@/components/content/ReaderLayout.vue'

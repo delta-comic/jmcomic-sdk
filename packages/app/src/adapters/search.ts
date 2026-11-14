@@ -6,7 +6,7 @@ import {
   type CommonComic,
   type CommonNovel,
   type PromoteItem,
-} from 'jmcomic-sdk'
+} from '@delta-comic/jmcomic-sdk'
 
 import { createPagedStream } from '@/adapters/stream'
 import { searchKeys, subscribeKeys } from '@/constants'

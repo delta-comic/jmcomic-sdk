@@ -1,4 +1,4 @@
-import { Service, UniUser, type Context, type Plugin } from '@delta-comic/client'
+import { Service, UniUser, type Context, type Component } from '@delta-comic/client'
 
 import { createSearch } from '@/adapters/search'
 import { pluginName } from '@/constants'
@@ -64,4 +64,4 @@ export const provideJmcomic = Object.assign(
     new JmcomicRuntimeService(ctx)
   },
   { provide: 'jmcomic', inject: ['config', 'i18n', 'network'] },
-) satisfies Plugin.Function
+) satisfies Component.Function
