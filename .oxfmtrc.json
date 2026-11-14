@@ -1,5 +1,12 @@
 {
-  "ignorePatterns": ["*.md", ".agents/**"],
+  "ignorePatterns": [
+    ".agents/**",
+    "typed-router.d.ts",
+    "bindings.ts",
+    "**/permissions/**",
+    "*.md",
+    "packages/app/*/public/runtime/**"
+  ],
   "endOfLine": "lf",
   "semi": false,
   "useTabs": false,
@@ -14,8 +21,9 @@
   "sortTailwindcss": {
     "preserveDuplicates": true,
     "preserveWhitespace": true,
-    "stylesheet": "./packages/app/src/index.css",
-    "attributes": [":class", "class"]
+    "stylesheet": "./packages/app/mobile/src/index.css",
+    "attributes": ["overlayClass", ":class", "Class"],
+    "functions": ["twMerge", "cn"]
   },
   "bracketSameLine": false,
   "bracketSpacing": true,

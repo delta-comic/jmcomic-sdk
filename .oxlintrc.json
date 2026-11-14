@@ -1,10 +1,20 @@
 {
-  "plugins": ["unicorn", "typescript", "oxc", "vue"],
+  "jsPlugins": ["twlinter"],
+  "plugins": ["unicorn", "typescript", "vue"],
   "categories": { "correctness": "error" },
-  "rules": { "no-thenable": "allow" },
+  "rules": {
+    "twlinter/no-duplicate-utilities": "error",
+    "twlinter/suggestCanonicalClasses": "error",
+    "no-thenable": "allow"
+  },
   "settings": { "vitest": { "typecheck": true } },
-  "env": { "builtin": true },
-  "globals": {},
-  "ignorePatterns": ["*.md", ".agents/**"],
+  "ignorePatterns": [
+    ".agents",
+    ".vscode",
+    "*.md",
+    "packages/ui/ui/lib/components/DcPullRefresh.vue",
+    "**/_lib/**",
+    "packages/app/*/public/runtime/**"
+  ],
   "options": { "typeAware": false, "typeCheck": false }
 }

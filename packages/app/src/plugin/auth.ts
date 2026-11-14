@@ -1,6 +1,6 @@
 import { UniUser } from '@delta-comic/client'
 import type { User } from '@delta-comic/client'
-import { type LoginUser } from 'jmcomic-sdk'
+import { type LoginUser } from '@delta-comic/jmcomic-sdk'
 
 import { pluginName } from '@/constants'
 import type { createItems } from '@/models/items'

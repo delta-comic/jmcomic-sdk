@@ -1,17 +1,8 @@
 {
-  "name": "jmcomic-sdk",
+  "name": "@delta-comic/jmcomic-sdk",
   "version": "1.0.2",
   "description": "适用于全平台的禁漫天堂接口完全封装",
-  "homepage": "https://github.com/delta-comic/jmcomic-sdk",
   "license": "MIT",
-  "author": {
-    "name": "wenxig",
-    "email": "wenxinguo12@gmail.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/delta-comic/jmcomic-sdk.git"
-  },
   "files": [
     "dist"
   ],
@@ -33,10 +24,6 @@
       "import": "./dist/node.js"
     }
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  },
   "dependencies": {
     "crypto-es": "catalog:",
     "ky": "catalog:",
@@ -44,14 +31,9 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "msw": "catalog:",
-    "ts-to-zod": "catalog:",
-    "typescript": "catalog:",
-    "vite-plus": "catalog:",
-    "vitest": "catalog:"
+    "ts-to-zod": "catalog:"
   },
   "optionalDependencies": {
     "sharp": "catalog:"
-  },
-  "readme": "./README.md"
+  }
 }

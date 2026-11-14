@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BadgeItem } from 'jmcomic-sdk'
+import type { BadgeItem } from '@delta-comic/jmcomic-sdk'
 import { NAlert, NButton, NSpin, NTabPane, NTabs } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 

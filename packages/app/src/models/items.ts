@@ -23,7 +23,7 @@ import {
   type RecommendComic,
   type RelatedBook,
   type UserMe,
-} from 'jmcomic-sdk'
+} from '@delta-comic/jmcomic-sdk'
 
 import { contentKeys, pluginName, searchKeys, subscribeKeys } from '@/constants'
 import type { PluginRuntime } from '@/runtime/PluginRuntime'
