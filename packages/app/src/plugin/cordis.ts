@@ -1,4 +1,4 @@
-import { UniUser, type Context, type Plugin } from '@delta-comic/client'
+import { UniUser, type Context, type Component } from '@delta-comic/client'
 import { SortType } from '@delta-comic/jmcomic-sdk'
 
 import { pluginName, searchKeys } from '@/constants'
@@ -93,4 +93,4 @@ export const jmcomicFunctions = [
   checkIn,
   registerRemote,
   registerShare,
-] satisfies readonly Plugin.Function[]
+] satisfies readonly Component.Function[]
