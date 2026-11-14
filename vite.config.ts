@@ -25,10 +25,6 @@ export default defineConfig(
         // build
         'build:packages': { command: 'vp run -r build', cache: { output: [] } },
         'build': { command: 'echo "no need"' },
-        'release-cli': {
-          command: 'vp run --filter @delta-comic/release-cli build',
-          cache: { output: ['script/manager/dist/**'] },
-        },
         // release
         'branch:develop': {
           command: 'vp exec dr branch prepare develop',
