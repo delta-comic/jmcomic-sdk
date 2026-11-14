@@ -34,5 +34,5 @@ jobs:
 
       - name: Lint and format check
         run: |
-          vp run build:packages
+          vpr @delta-comic/plugin-jmcomic#build
           vp check

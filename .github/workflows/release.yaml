@@ -87,7 +87,6 @@ jobs:
 
       - name: Build plugin
         run: |
-          vp run build:packages
           vpr @delta-comic/plugin-jmcomic#build
 
       - name: Configure auth

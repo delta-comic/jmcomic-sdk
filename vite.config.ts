@@ -20,8 +20,6 @@ export default defineConfig(
       tasks: {
         // dev
         'dev': { command: 'vp run @delta-comic/plugin-jmcomic#dev', cache: false },
-        // build
-        'build:packages': { command: 'vp run -r build', cache: { output: [] } },
         // release
         'branch:develop': { command: 'vp exec dr branch prepare develop', cache: false },
         'release': { command: 'vp exec dr release run', cache: false },

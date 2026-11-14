@@ -34,5 +34,5 @@ jobs:
 
       - name: Test
         run: |
-          vp run build:packages
+          vpr @delta-comic/plugin-jmcomic#build
           vp test run
