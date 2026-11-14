@@ -26,22 +26,10 @@ export default defineConfig(
         'build:packages': { command: 'vp run -r build', cache: { output: [] } },
         'build': { command: 'echo "no need"' },
         // release
-        'branch:develop': {
-          command: 'vp exec dr branch prepare develop',
-          dependsOn: ['release-cli'],
-          cache: false,
-        },
-        'release': { command: 'vp exec dr release run', dependsOn: ['release-cli'], cache: false },
-        'release:preview': {
-          command: 'vp exec dr branch promote preview',
-          dependsOn: ['release-cli'],
-          cache: false,
-        },
-        'release:stable': {
-          command: 'vp exec dr branch promote stable',
-          dependsOn: ['release-cli'],
-          cache: false,
-        },
+        'branch:develop': { command: 'vp exec dr branch prepare develop', cache: false },
+        'release': { command: 'vp exec dr release run', cache: false },
+        'release:preview': { command: 'vp exec dr branch promote preview', cache: false },
+        'release:stable': { command: 'vp exec dr branch promote stable', cache: false },
         // linter
         'typecheck': {
           command: 'vp exec tsc --project ./tsconfig.json && vp run -r typecheck',
