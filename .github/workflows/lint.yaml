@@ -1,0 +1,38 @@
+name: 风格检查
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lint/${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Web lint 与 fmt
+    runs-on: ubuntu-latest
+    env:
+      HUSKY: 0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1.22.0
+        with:
+          node-version-file: .node-version
+          cache: true
+          node-manager: true
+          run-install: true
+          version-file: package.json
+
+      - name: Lint and format check
+        run: |
+          vpr @delta-comic/plugin-jmcomic#build
+          vp check

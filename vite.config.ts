@@ -19,33 +19,12 @@ export default defineConfig(
       cache: { tasks: true, scripts: false },
       tasks: {
         // dev
-        'dev': { command: 'vp run @delta-comic/app#dev:desktop', cache: false },
-        'dev:android': { command: 'vp run @delta-comic/app#dev:mobile', cache: false },
-        'dev:web': { command: 'vp run @delta-comic/app#dev:web:mobile', cache: false },
-        // build
-        'build:packages': { command: 'vp run -r build', cache: { output: [] } },
-        'build': { command: 'echo "no need"' },
-        'release-cli': {
-          command: 'vp run --filter @delta-comic/release-cli build',
-          cache: { output: ['script/manager/dist/**'] },
-        },
+        'dev': { command: 'vp run @delta-comic/plugin-jmcomic#dev', cache: false },
         // release
-        'branch:develop': {
-          command: 'vp exec dr branch prepare develop',
-          dependsOn: ['release-cli'],
-          cache: false,
-        },
-        'release': { command: 'vp exec dr release run', dependsOn: ['release-cli'], cache: false },
-        'release:preview': {
-          command: 'vp exec dr branch promote preview',
-          dependsOn: ['release-cli'],
-          cache: false,
-        },
-        'release:stable': {
-          command: 'vp exec dr branch promote stable',
-          dependsOn: ['release-cli'],
-          cache: false,
-        },
+        'branch:develop': { command: 'vp exec dr branch prepare develop', cache: false },
+        'release': { command: 'vp exec dr release run', cache: false },
+        'release:preview': { command: 'vp exec dr branch promote preview', cache: false },
+        'release:stable': { command: 'vp exec dr branch promote stable', cache: false },
         // linter
         'typecheck': {
           command: 'vp exec tsc --project ./tsconfig.json && vp run -r typecheck',

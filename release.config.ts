@@ -13,7 +13,13 @@ export default defineConfig({
     ['@semantic-release/changelog', { changelogFile: 'CHANGELOG.md' }],
     [
       '@semantic-release/github',
-      { assets: ['dist/release/*'], releaseNameTemplate: createReleaseNameTemplate() },
+      {
+        assets: [
+          { path: 'packages/app/dist/manifest.json', label: 'manifest.json' },
+          { path: 'packages/app/dist/plugin.zip', label: 'plugin.zip' },
+        ],
+        releaseNameTemplate: createReleaseNameTemplate(),
+      },
     ],
   ],
 }).withCI({
