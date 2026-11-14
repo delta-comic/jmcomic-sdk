@@ -1,4 +1,4 @@
-name: 自动发布
+name: 构建和发布
 
 on:
   push:
@@ -8,65 +8,99 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: write
   id-token: write
+  issues: write
   packages: write
+  pull-requests: write
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release/${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  release:
-    name: Semantic Release
+  plan:
+    if: github.ref_name == 'main' || github.ref_name == 'next'
     runs-on: ubuntu-latest
+    outputs:
+      has-release: ${{ steps.release-plan.outputs.has-release }}
+      version: ${{ steps.release-plan.outputs.version }}
+      channel: ${{ steps.release-plan.outputs.channel }}
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       HUSKY: 0
-      JMCOMIC_TEST_PASSWORD: ${{ secrets.JMCOMIC_TEST_PASSWORD }}
-      JMCOMIC_TEST_USERNAME: ${{ secrets.JMCOMIC_TEST_USERNAME }}
     steps:
-      - name: Checkout full history
-        uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup Vite+
-        uses: voidzero-dev/setup-vp@v1
+        uses: voidzero-dev/setup-vp@v1.22.0
         with:
           node-version-file: .node-version
           cache: true
-          run-install: false
+          node-manager: true
+          run-install: true
+          version-file: package.json
 
-      - name: Configure GitHub Packages authentication
-        run: vp pm config set '//npm.pkg.github.com/:_authToken' "$GITHUB_TOKEN"
+      - run: vp run --filter @delta-comic/release-cli build
+      - run: vp run build:packages
 
-      - name: Configure GitHub Packages authentication
-        uses: actions/setup-node@v7
+      - name: Resolve semantic release plan
+        id: release-plan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: vp exec dr release plan
+
+      - name: No release required
+        if:
+          steps.release-plan.outputs.has-release != 'true' &&
+          steps.release-plan.outputs.recovery-required != 'true'
+        run: echo 'No releasable Conventional Commit was found.'
+
+  web:
+    needs: plan
+    if: needs.plan.outputs.has-release == 'true'
+    runs-on: ubuntu-latest
+    env:
+      HUSKY: 0
+      RELEASE_VERSION: ${{ needs.plan.outputs.version }}
+      DELTA_SKIP_LIB_BUILD: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1.22.0
         with:
           node-version-file: .node-version
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@delta-comic'
+          cache: true
+          node-manager: true
+          run-install: true
+          version-file: package.json
 
-      - name: Install dependencies
-        run: vp install --frozen-lockfile
-
-      - name: Check formatting and lint
+      - name: Synchronize build version
         run: |
-          vp fmt --check
-          vp lint
+          vp exec dr version "${{ needs.plan.outputs.version }}" -p "${{matrix.platform}}"
 
-      - name: Check TypeScript 7 and Vue types
-        run: vp run typecheck
+      - name: Build plugin
+        run: |
+          vp run build:packages
+          vpr @delta-comic/plugin-jmcomic#build
 
-      - name: Run Vitest type tests
-        run: vp test typecheck
+      - name: Configure auth
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name 'delta-comic-bot'
+          git config user.email 'delta-comic-bot@proton.me'
+          vp pm config set '//npm.pkg.github.com/:_authToken' "$GITHUB_TOKEN"
 
-      - name: Test with coverage
-        run: vp test run --coverage
-
-      - name: Build release packages
-        run: vp run build
-
-      - name: Publish release
-        run: vp run release
+      - name: Publish semantic release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: vp exec dr release run
