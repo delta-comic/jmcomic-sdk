@@ -171,11 +171,11 @@ catalogs:
       specifier: ^21.2.4
       version: 21.2.4
     '@delta-comic/client':
-      specifier: ^3.0.0-next.29
-      version: 3.0.0-next.29
+      specifier: ^3.0.0-next.30
+      version: 3.0.0-next.30
     '@delta-comic/release-cli':
-      specifier: ^3.0.0-next.29
-      version: 3.0.0-next.29
+      specifier: ^3.0.0-next.30
+      version: 3.0.0-next.30
     '@semantic-release/changelog':
       specifier: ^7.0.0
       version: 7.0.0
@@ -288,7 +288,7 @@ importers:
         version: 21.2.4
       '@delta-comic/release-cli':
         specifier: 'catalog:'
-        version: 3.0.0-next.29(supports-color@7.2.0)(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2)
+        version: 3.0.0-next.30(supports-color@7.2.0)(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2)
       '@semantic-release/changelog':
         specifier: 'catalog:'
         version: 7.0.0(semantic-release@25.0.9(supports-color@7.2.0)(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))
@@ -339,7 +339,7 @@ importers:
     dependencies:
       '@delta-comic/client':
         specifier: 'catalog:'
-        version: 3.0.0-next.29(vite-plus@1.6.0(@types/node@26.6.6)(@vitejs/devtools@0.7.6(@devframes/json-render@1.3.2(@devframes/hub@1.3.2(@devframes/agentic@1.3.2)(crossws@0.4.17(srvx@1.0.8))(devframe@1.3.2))(devframe@1.3.2))(@voidzero-dev/vite-plus-core@1.6.0)(crossws@0.4.17(srvx@1.0.8))(srvx@1.0.8))(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@volar/typescript@2.4.30(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))(@vue/language-core@3.3.14)(happy-dom@21.0.4)(jiti@2.7.0)(terser@5.51.2)(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2)(vue-tsc@3.3.14(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))(yaml@2.9.1))(vue@3.6.0-rc.15(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))
+        version: 3.0.0-next.30(vite-plus@1.6.0(@types/node@26.6.6)(@vitejs/devtools@0.7.6(@devframes/json-render@1.3.2(@devframes/hub@1.3.2(@devframes/agentic@1.3.2)(crossws@0.4.17(srvx@1.0.8))(devframe@1.3.2))(devframe@1.3.2))(@voidzero-dev/vite-plus-core@1.6.0)(crossws@0.4.17(srvx@1.0.8))(srvx@1.0.8))(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@volar/typescript@2.4.30(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))(@vue/language-core@3.3.14)(happy-dom@21.0.4)(jiti@2.7.0)(terser@5.51.2)(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2)(vue-tsc@3.3.14(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))(yaml@2.9.1))(vue@3.6.0-rc.15(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))
       '@delta-comic/jmcomic-sdk':
         specifier: workspace:*
         version: link:../sdk
@@ -813,14 +813,14 @@ packages:
       '@csstools/css-parser-algorithms': ^2.1.1
       '@csstools/css-tokenizer': ^2.1.1
 
-  '@delta-comic/client@3.0.0-next.29':
-    resolution: {integrity: sha512-NykvVMyxGqgtIGzQs3eD8HrmCMAaRKNFnZG0UQdfZNyYuC0IDea1xLsugBXK6UW9t9mpKPmDNv+PbVW0N9TgZg==, tarball: https://npm.pkg.github.com/download/@delta-comic/client/3.0.0-next.29/da26959fd25335736b48df2051bcbe835dc4d9be}
+  '@delta-comic/client@3.0.0-next.30':
+    resolution: {integrity: sha512-mOk9MgynkqqBpmMEVD1sAZuYOu/gYQQUT4gCh4KbnAio9v2BmhR7tvd+YrV/heRlwSKVE0B32S7ZQ5Qm3WkpJQ==, tarball: https://npm.pkg.github.com/download/@delta-comic/client/3.0.0-next.30/56dcba3a8f20799a93bcc2923fc1527071b04baf}
     peerDependencies:
       vite-plus: 1.6.0
       vue: 3.6.0-rc.15
 
-  '@delta-comic/release-cli@3.0.0-next.29':
-    resolution: {integrity: sha512-24f2IoHuZUiRLt9aCjhmxUZ4JLTtdXixVfxiV5lY9is8AGr2CMerm1DCUAk7uzwGVKIvd5VNktd2ojdzdofq1Q==, tarball: https://npm.pkg.github.com/download/@delta-comic/release-cli/3.0.0-next.29/2ad30e15f56808b22defdecc7710971470d08f03}
+  '@delta-comic/release-cli@3.0.0-next.30':
+    resolution: {integrity: sha512-9R3OEtuL1UhdFchXASTzgauLACL8BGlMD2828bx+9Ml/L1SJArvuX1U738Bqoxc7tCHU8JJ5IetXYOtpUk+dpw==, tarball: https://npm.pkg.github.com/download/@delta-comic/release-cli/3.0.0-next.30/2888e0ffa825618c0c2cc12b4c15484cd3b7e71d}
     hasBin: true
 
   '@devframes/agentic@1.3.2':
@@ -5337,7 +5337,7 @@ snapshots:
       '@csstools/css-parser-algorithms': 3.0.4(@csstools/css-tokenizer@3.0.3)
       '@csstools/css-tokenizer': 3.0.3
 
-  '@delta-comic/client@3.0.0-next.29(vite-plus@1.6.0(@types/node@26.6.6)(@vitejs/devtools@0.7.6(@devframes/json-render@1.3.2(@devframes/hub@1.3.2(@devframes/agentic@1.3.2)(crossws@0.4.17(srvx@1.0.8))(devframe@1.3.2))(devframe@1.3.2))(@voidzero-dev/vite-plus-core@1.6.0)(crossws@0.4.17(srvx@1.0.8))(srvx@1.0.8))(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@volar/typescript@2.4.30(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))(@vue/language-core@3.3.14)(happy-dom@21.0.4)(jiti@2.7.0)(terser@5.51.2)(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2)(vue-tsc@3.3.14(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))(yaml@2.9.1))(vue@3.6.0-rc.15(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))':
+  '@delta-comic/client@3.0.0-next.30(vite-plus@1.6.0(@types/node@26.6.6)(@vitejs/devtools@0.7.6(@devframes/json-render@1.3.2(@devframes/hub@1.3.2(@devframes/agentic@1.3.2)(crossws@0.4.17(srvx@1.0.8))(devframe@1.3.2))(devframe@1.3.2))(@voidzero-dev/vite-plus-core@1.6.0)(crossws@0.4.17(srvx@1.0.8))(srvx@1.0.8))(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@volar/typescript@2.4.30(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))(@vue/language-core@3.3.14)(happy-dom@21.0.4)(jiti@2.7.0)(terser@5.51.2)(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2)(vue-tsc@3.3.14(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))(yaml@2.9.1))(vue@3.6.0-rc.15(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2))':
     dependencies:
       cordis: 4.0.0-rc.13
       kysely: 0.30.0-beta.2
@@ -5350,7 +5350,7 @@ snapshots:
       - '@cordisjs/include'
       - '@cordisjs/loader'
 
-  '@delta-comic/release-cli@3.0.0-next.29(supports-color@7.2.0)(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2)':
+  '@delta-comic/release-cli@3.0.0-next.30(supports-color@7.2.0)(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2)':
     dependencies:
       commander: 15.1.0
       semantic-release: 25.0.9(supports-color@7.2.0)(typescript-native-bridge@6.0.3-bridge.19.tsgo.7.0.2)
