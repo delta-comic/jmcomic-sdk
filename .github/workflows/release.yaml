@@ -43,15 +43,13 @@ jobs:
           node-manager: true
           run-install: false
           version-file: package.json
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@delta-comic'
 
       - name: Install depends
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           vp pm config set '//npm.pkg.github.com/:_authToken' "$GITHUB_TOKEN"
-          vp i
+          vp i --frozen-lockfile
 
       - name: Resolve semantic release plan
         id: release-plan
@@ -86,15 +84,13 @@ jobs:
           node-manager: true
           run-install: false
           version-file: package.json
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@delta-comic'
 
       - name: Install depends
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           vp pm config set '//npm.pkg.github.com/:_authToken' "$GITHUB_TOKEN"
-          vp i
+          vp i --frozen-lockfile
 
       - name: Synchronize build version
         run: |
