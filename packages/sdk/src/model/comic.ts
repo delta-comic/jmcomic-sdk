@@ -76,6 +76,7 @@ export interface FullComic extends BaseComic {
   likes: Numeric
 }
 
+/** @zod */
 export interface ComicComment extends Comment {
   AID?: Numeric
   replys?: ComicComment[]

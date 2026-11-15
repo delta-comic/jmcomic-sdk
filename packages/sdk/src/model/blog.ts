@@ -58,6 +58,7 @@ export interface FullBlog extends CommonBlog {
   is_liked: boolean
 }
 
+/** @zod */
 export interface BlogComment extends Comment {
   BID: Numeric
   replys?: BlogComment[]
