@@ -24,6 +24,9 @@
       "import": "./dist/node.js"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "crypto-es": "catalog:",
     "ky": "catalog:",
