@@ -41,11 +41,17 @@ jobs:
           node-version-file: .node-version
           cache: true
           node-manager: true
-          run-install: true
+          run-install: false
           version-file: package.json
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@delta-comic'
 
-      - run: vp run --filter @delta-comic/release-cli build
-      - run: vp run build:packages
+      - name: Install depends
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          vp pm config set '//npm.pkg.github.com/:_authToken' "$GITHUB_TOKEN"
+          vp i
 
       - name: Resolve semantic release plan
         id: release-plan
@@ -78,8 +84,17 @@ jobs:
           node-version-file: .node-version
           cache: true
           node-manager: true
-          run-install: true
+          run-install: false
           version-file: package.json
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@delta-comic'
+
+      - name: Install depends
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          vp pm config set '//npm.pkg.github.com/:_authToken' "$GITHUB_TOKEN"
+          vp i
 
       - name: Synchronize build version
         run: |
