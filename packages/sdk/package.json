@@ -1,7 +1,7 @@
 {
   "name": "@delta-comic/jmcomic-sdk",
   "version": "1.0.2",
-  "description": "适用于全平台的禁漫天堂接口完全封装",
+  "description": "「天堂支点」",
   "license": "MIT",
   "files": [
     "dist"

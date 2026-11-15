@@ -10,7 +10,7 @@ import type {
   PageResult,
   PaginationQuery,
 } from '..'
-import { sAuthorDetail, sBookContents, sBookRelates, sLessBook } from '../model/book'
+import { sBookAuthor, sBookContents, sBookRelates, sLessBook } from '../model/book'
 import { sNumeric } from '../model/utils'
 
 export interface BookSourceQuery {
@@ -22,7 +22,7 @@ const sBookPage = z.object({
   data: z.object({ content: z.array(sLessBook), total: sNumeric.transform(Number) }),
 })
 const sBookRelatesResponse = z.object({ data: sBookRelates })
-const sAuthorDetailResponse = z.object({ status: z.string().optional(), data: sAuthorDetail })
+const sBookAuthorResponse = z.object({ status: z.string().optional(), data: sBookAuthor })
 
 export class Book {
   public constructor(protected readonly sdk: JMComic) {}
@@ -55,7 +55,7 @@ export class Book {
     const result = await this.sdk.requester.request(
       'get',
       this.sdk.config.apiPath.book.authorDetail,
-      sAuthorDetailResponse,
+      sBookAuthorResponse,
       { searchParams: { id: data.id, lang: data.lang, source: data.source }, signal },
     )
     return { ...result.data, author_id: data.id }

@@ -50,9 +50,8 @@ export class Requester {
             const key = request.headers.get(Requester.innerHeaderKey)
             if (!key) return response
             const text = await response.clone().text()
-            if (text.startsWith('Could not connect to mysql!')) {
+            if (text.includes('Could not connect to mysql!'))
               throw new JmApiError('NETWORK_ERROR', '禁漫服务暂时无法连接数据库', request.url)
-            }
 
             let envelope: JmEnvelope
             try {
@@ -64,7 +63,7 @@ export class Requester {
             if (!Object.prototype.hasOwnProperty.call(envelope, 'data')) return response
             if (typeof envelope.data !== 'string') return responseWithJson(envelope.data, response)
 
-            for (const template of decryptTemplates) {
+            for (const template of decryptTemplates)
               try {
                 const dynamicKey = MD5(`${key}${template}`).toString()
                 const decrypted = AES.decrypt(envelope.data, Utf8.parse(dynamicKey), { mode: ECB })
@@ -75,7 +74,7 @@ export class Requester {
               } catch {
                 continue
               }
-            }
+
             throw new JmApiError('DECRYPTION_FAILED', '禁漫响应解密失败', request.url)
           },
         ],

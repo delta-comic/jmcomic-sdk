@@ -23,7 +23,7 @@ export default defineConfig({
     ],
   ],
 }).withCI({
-  jsonVersionPaths: ['packages/app/package.json', 'packages/sdk/package.json'],
+  jsonVersionPaths: ['package.json', 'packages/app/package.json', 'packages/sdk/package.json'],
   cargoTomlVersionPaths: [],
   cargoLockPackageNames: [],
   workspace: { roots: ['packages'] },

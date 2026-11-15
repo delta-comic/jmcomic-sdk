@@ -1,7 +1,6 @@
 import type { Numeric } from './utils'
 
 export * from './generated/book'
-export { sBookAuthor as sAuthorDetail } from './generated/book'
 
 /** @zod */
 export interface CommonBook {
